@@ -21,6 +21,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
 
 
+
         viewModel.text.observe(viewLifecycleOwner) {
         }
     }

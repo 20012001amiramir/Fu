@@ -1,15 +1,19 @@
 package com.example.fu
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fu.interactor.SessionInteractors
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.M)
 class AppActivityViewModel @Inject constructor(
-
-): ViewModel() {
+    private val sessionInteractors: SessionInteractors,
+    ): ViewModel() {
 
 
     private val _appViewState = MutableLiveData<AppViewState>()
@@ -20,9 +24,12 @@ class AppActivityViewModel @Inject constructor(
             navigateToMainScreen()
         }
     }
-
     private fun navigateToMainScreen() {
-        _appViewState.value = AppViewState.QrReader
+            if (sessionInteractors.isAuthorized()) {
+                _appViewState.value = AppViewState.QrReader
+            } else {
+                _appViewState.value = AppViewState.Login
+            }
     }
 
 
@@ -35,7 +42,7 @@ class AppActivityViewModel @Inject constructor(
     }
 
     sealed class AppViewState {
-        object Onboarding : AppViewState()
+        object Register : AppViewState()
         object Login : AppViewState()
         object QrReader : AppViewState()
         object Schedule : AppViewState()

@@ -28,7 +28,8 @@ interface AuthApi {
     @FormUrlEncoded
     @POST("/Account/RefreshToken")
     suspend fun refreshToken(
-        @Header("accept")accept: String
-    ): TokenResponse
+        @Header("Authorization") token: String
+    )
+    : LoginResponse
 
 }

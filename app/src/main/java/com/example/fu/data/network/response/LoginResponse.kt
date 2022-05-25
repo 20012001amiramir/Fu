@@ -8,7 +8,7 @@ data class LoginResponse(
     @Json(name = "data")
     val data: DataToken,
     @Json(name = "messages")
-    val messages: String?,
+    val messages: List<String>?,
     @Json(name = "success")
     val success: Boolean
 )

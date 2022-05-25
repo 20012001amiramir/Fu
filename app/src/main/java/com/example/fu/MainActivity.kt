@@ -1,21 +1,17 @@
 package com.example.fu
 
 import android.Manifest
-import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.annotation.IdRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.fu.databinding.ActivityMainBinding
 import com.example.fu.di.AppActivityModule
 import com.example.fu.di.Scopes.APP_ACTIVITY_SCOPE
@@ -24,9 +20,6 @@ import com.example.fu.di.factory.viewModels
 import com.example.fu.util.ifNotNull
 import com.example.fu.util.navController
 import com.example.fu.util.versionAllowsToFullyColorizeNavBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import toothpick.Toothpick
 import toothpick.smoothie.lifecycle.closeOnDestroy
 
@@ -47,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         R.id.navigation_dashboard,
         R.id.navigation_notifications
     )
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -126,11 +120,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun renderAppViewState(appViewState: AppActivityViewModel.AppViewState) {
         when (appViewState) {
-            is AppActivityViewModel.AppViewState.Onboarding -> {
-                setMainScreen(R.id.navigation_home )
+            is AppActivityViewModel.AppViewState.Register -> {
+                setMainScreen(R.id.loginFragment )
             }
             is AppActivityViewModel.AppViewState.Login -> {
-                setMainScreen(R.id.navigation_dashboard)
+                setMainScreen(R.id.mainEnterFragment)
             }
             is AppActivityViewModel.AppViewState.Schedule -> {
                 setMainScreen(R.id.navigation_notifications)

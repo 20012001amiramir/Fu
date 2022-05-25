@@ -1,5 +1,7 @@
 package com.example.fu.data.network.interceptor
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.fu.data.network.model.*
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.runBlocking
@@ -8,12 +10,13 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import retrofit2.HttpException
-import ru.tstst.schoolboy.data.repository.OAuthRepository
-import ru.tstst.schoolboy.interactor.SessionInteractors
+import com.example.fu.data.repository.OAuthRepository
+import com.example.fu.interactor.SessionInteractors
 import com.example.fu.util.ErrorHandler
 import toothpick.Lazy
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.M)
 class TokenAuthenticator @Inject constructor(
     private val oAuthRepository: OAuthRepository,
     private val moshi: Moshi,
@@ -25,19 +28,14 @@ class TokenAuthenticator @Inject constructor(
     private var error : RefreshTokenTooEarly? = null
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        //TODO use kotlin flow with retry
-        // TODO: (Discuss) If authorized call made before oauth it will try to refreshToken here and spams with "Unauthorized" snacks from oauthRepository.refreshTokensInternal
-        // TODO: (Discuss) Real retry count is 4 now with this logic. And it continues to retry after 0 if not cancelled by scope.
         runBlocking {
             try {
                 if (tryCount <= 3) {
                     ++tryCount
-                    oAuthRepository.refreshTokens() //TODO make refreshToken get token
-                    sessionInteractors.get().confirmUserIsActiveIfNeeded()
+                    oAuthRepository.refreshTokens()
                 } else {
                     tryCount = 0
                     throw TechnicalError(401, "Auth failed")
-                    // TODO: (Discuss) This logic is accidentally broken. The error doesn't switch us to login screen, but shows snack with "Auth failed"
                 }
             } catch (error: Throwable) {
                 handleRefreshTokenError(error)

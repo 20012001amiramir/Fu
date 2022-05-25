@@ -1,4 +1,4 @@
-package ru.tstst.schoolboy.data.repository
+package com.example.fu.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,6 @@ class SessionRepository @Inject constructor(
     private val authErrorFlow = MutableStateFlow<Throwable?>(null)
 
     var minSupportedVersionCode: Int? = null
-    var mwVersion: String? = null
 
     fun authErrorFlow(): Flow<Throwable> = authErrorFlow.filterNotNull()
 
@@ -21,15 +20,4 @@ class SessionRepository @Inject constructor(
         authErrorFlow.valueAsUnique = authError
     }
 
-    suspend fun getVersions() {
-        return api.getVersions()
-            .let {
-                minSupportedVersionCode = it.android.applicationCode
-                mwVersion = it.mw.mwVersion // Sad, but yes, we get the mw version in this request.
-            }
-    }
-
-    suspend fun confirmUserIsActive() {
-        return api.confirmUserIsActive()
-    }
 }

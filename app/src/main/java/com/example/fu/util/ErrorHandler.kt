@@ -8,8 +8,8 @@ import com.example.fu.data.network.model.RefreshTokenError
 import com.example.fu.data.network.model.RefreshTokenTooEarly
 import com.example.fu.data.network.model.SilentError
 import com.example.fu.data.network.model.TechnicalError
-import ru.tstst.schoolboy.data.persistent.LocalStorage
-import ru.tstst.schoolboy.domain.profile.AccountInfo
+import com.example.fu.data.persistent.LocalStorage
+import com.example.fu.domain.profile.AccountInfo
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -14,7 +14,6 @@ class App : Application() {
         initToothpick()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun initToothpick() {
         Toothpick
             .openScope(Scopes.APP_SCOPE)

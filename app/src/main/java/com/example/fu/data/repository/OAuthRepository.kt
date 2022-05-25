@@ -1,16 +1,17 @@
-package ru.tstst.schoolboy.data.repository
+package com.example.fu.data.repository
 
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
+import android.os.Build
+import androidx.annotation.RequiresApi
 import kotlinx.coroutines.*
-import okhttp3.HttpUrl
 import com.example.fu.data.network.AuthApi
 import com.example.fu.data.network.model.TechnicalError
-import ru.tstst.schoolboy.data.persistent.LocalStorage
-import ru.tstst.schoolboy.domain.OAuthUrlData.Companion.OAuthUrlData
+import com.example.fu.data.network.response.LoginResponse
+import com.example.fu.data.network.response.RegisterResponse
+import com.example.fu.data.persistent.LocalStorage
 import com.example.fu.util.ifNotNull
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.M)
 class OAuthRepository @Inject constructor(
     private val authApi: AuthApi,
     private val localStorage: LocalStorage
@@ -21,19 +22,13 @@ class OAuthRepository @Inject constructor(
     private val refreshTokenContext = newSingleThreadContext("RefreshTokenContext")
     private var refreshTokensJob: Job? = null
 
-    suspend fun getOAuthToken(code: String) {
-        localStorage
-            .oAuthUrlData
-            ?.let { oAuthData ->
-                val tokenResponse = authApi.refreshToken(
-                    oAuthData.
-                )
-                localStorage.refreshToken = tokenResponse.refreshToken
-                accessToken = tokenResponse.accessToken
-            }
-            ?: run {
-                throw TechnicalError(401, "Unauthorized")
-            }
+
+    suspend fun login(email: String, password: String): LoginResponse {
+        return authApi.login(email, password)
+    }
+
+    suspend fun register(email: String, password: String, returnPassword: String): RegisterResponse {
+        return authApi.register(email, password, returnPassword)
     }
 
     suspend fun refreshTokens() {
@@ -54,48 +49,18 @@ class OAuthRepository @Inject constructor(
     private suspend fun refreshTokensInternal() {
         ifNotNull(
             localStorage.refreshToken,
-            localStorage.oAuthUrlData
-        ) { refreshToken, oAuthUrlData ->
-            val tokenResponse = authApi.refreshOAuthToken(
-                oAuthUrlData.clientId,
-                refreshToken
+            localStorage.dataAccounts
+        ) { refreshToken, _ ->
+            val tokenResponse = authApi.refreshToken(
+                "Bearer $refreshToken"
             )
-            localStorage.refreshToken = tokenResponse.refreshToken
-            accessToken = tokenResponse.accessToken
+            localStorage.refreshToken = tokenResponse.data.refreshToken
+            accessToken = tokenResponse.data.accessToken
             localStorage.possibleRefreshToken = null
         } ?: run {
             throw TechnicalError(401, "Unauthorized")
         }
     }
-
-    suspend fun revokeToken() {
-        ifNotNull(
-            localStorage.refreshToken,
-            localStorage.oAuthUrlData
-        ) { refreshToken, oAuthUrlData ->
-            authApi.revokeOAuthToken(oAuthUrlData.clientId, refreshToken)
-        }
-    }
-
-    fun getOAuthUrl(): String {
-        val oAuthData = OAuthUrlData()
-
-        localStorage.oAuthUrlData = oAuthData
-
-        val url = HttpUrl.Builder()
-            .scheme("https")
-            .host(oAuthData.oAuthBaseUrl)
-            .addPathSegments(oAuthData.oAuthUrl)
-            .addQueryParameter("client_id", oAuthData.clientId)
-            .addQueryParameter("response_type", oAuthData.responseType)
-            .addQueryParameter("redirect_uri", oAuthData.redirectUri)
-            .addQueryParameter("state", oAuthData.state)
-            .addQueryParameter("code_challenge", oAuthData.codeChallenge)
-            .addQueryParameter("code_challenge_method", oAuthData.codeChallengeMethod)
-            .build()
-        return url.toString()
-    }
-
     fun isAuthorized() = localStorage.refreshToken != null
 
     fun changeToken(access: String?, refresh: String?) {

@@ -21,7 +21,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard){
 
         val dashboardViewModel: DashboardViewModel by viewModels(Scopes.APP_SCOPE , Scopes.APP_ACTIVITY_SCOPE)
 
-        val textView: TextView = binding.textDashboard
+        val textView: TextView = binding.dashboard
         dashboardViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }

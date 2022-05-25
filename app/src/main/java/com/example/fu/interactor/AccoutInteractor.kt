@@ -1,8 +1,11 @@
 package ru.tstst.schoolboy.interactor
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.fu.data.repository.AccountRepository
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.N)
 class AccountInteractor @Inject constructor(
     private val repository: AccountRepository
 ){
@@ -14,11 +17,6 @@ class AccountInteractor @Inject constructor(
     suspend fun deleteAccount(id: String) {
         repository.deleteToken(id)
     }
-    fun loadAction(currentProfile: Boolean) = repository.loadAction(currentProfile)
-
-    fun getAction() = repository.getActionFlow()
-
-    fun getAccountsFlow() = repository.accountFlow
 
     suspend fun deleteCurrentAccount() {
         repository.deleteCurrentAccount()

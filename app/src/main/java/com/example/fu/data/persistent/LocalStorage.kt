@@ -1,7 +1,9 @@
-package ru.tstst.schoolboy.data.persistent
+package com.example.fu.data.persistent
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
@@ -10,16 +12,13 @@ import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import ru.tstst.schoolboy.domain.Language
-import ru.tstst.schoolboy.domain.OAuthUrlData
-import ru.tstst.schoolboy.domain.notifications.NotificationEntity
 import com.example.fu.util.fromJson
-import ru.tstst.schoolboy.domain.profile.AccountInfo
+import com.example.fu.domain.profile.AccountInfo
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
-
+@RequiresApi(Build.VERSION_CODES.M)
 class LocalStorage @Inject constructor(
     context: Context,
     moshi: Moshi
@@ -29,41 +28,6 @@ class LocalStorage @Inject constructor(
 
     private val _accountsFlow = MutableStateFlow(dataAccounts)
     val accountsFlow: StateFlow<String?> = _accountsFlow
-
-    var cashedNotification : String?
-        set(value) {
-            securePrefs.edit{ putString(CASHED_NOTIFICATION, value) }
-            idFirstNotification = ""
-        }
-        get() {
-            return if (refreshToken == null)
-                securePrefs.getString(DefaultValue.CASHED_NOTIFICATION, DefaultValue.CASHED_NOTIFICATION)
-            else
-                securePrefs.getString(CASHED_NOTIFICATION, DefaultValue.CASHED_NOTIFICATION)
-        }
-
-    var idFirstNotification : String?
-        private set(value) {
-            securePrefs.edit{
-                val notifications = cashedNotification?.fromJson<List<NotificationEntity>>()
-                putString(
-                    ID_NOTIFICATION,
-                    if (notifications?.isEmpty() == true) {
-                        ""
-                    } else {
-                        notifications?.first()?.id
-                    }
-                )
-            }
-        }
-        get() = securePrefs.getString(ID_NOTIFICATION, null)
-
-    var oAuthUrlData: OAuthUrlData?
-            by JsonDelegate(
-                CODE_VERIFIER_KEY,
-                pref,
-                moshi.adapter(OAuthUrlData::class.java)
-            )
 
     var dataAccounts : String?
         set(value) {
@@ -177,6 +141,7 @@ class LocalStorage @Inject constructor(
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
+
     private fun createSecurePrefs(context: Context): SharedPreferences {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
         return EncryptedSharedPreferences.create(
@@ -188,18 +153,11 @@ class LocalStorage @Inject constructor(
         )
     }
 
-    var languageTag: String
-        set(value) {
-            pref.edit { putString(LANGUAGE_TAG, value) }
-        }
-        get() = pref.getString(LANGUAGE_TAG, Language.RU.tag)!!
-
     var shouldConfirmUserIsActive: Boolean
         get() = pref.getBoolean(SHOULD_CONFIRM_USER_IS_ACTIVE, false)
         set(value) = pref.edit { putBoolean(SHOULD_CONFIRM_USER_IS_ACTIVE, value)}
 
     fun clear() {
-        oAuthUrlData = null
         refreshToken = null
         possibleRefreshToken = null
     }

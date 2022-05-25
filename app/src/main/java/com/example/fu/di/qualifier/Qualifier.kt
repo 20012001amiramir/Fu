@@ -1,4 +1,4 @@
-package ru.tstst.schoolboy.di.qualifier
+package com.example.fu.di.qualifier
 
 import javax.inject.Qualifier
 
