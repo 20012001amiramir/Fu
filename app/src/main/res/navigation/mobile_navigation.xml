@@ -22,4 +22,12 @@
         android:name="com.example.fu.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.fu.ui.enter.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.fu.ui.enter.RegisterFragment"
+        android:label="RegisterFragment" />
 </navigation>

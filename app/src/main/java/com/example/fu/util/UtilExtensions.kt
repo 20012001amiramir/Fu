@@ -1,5 +1,6 @@
 package com.example.fu.util
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -13,7 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.fu.BuildConfig
+import com.example.fu.R
 import kotlinx.coroutines.flow.MutableStateFlow
+import okhttp3.OkHttpClient
 import java.security.GeneralSecurityException
 import java.security.KeyStore
 import java.security.cert.X509Certificate
@@ -78,6 +82,105 @@ fun Context.openUrl(url: String) {
     customTabsIntent.launchUrl(this, Uri.parse(url))
 }
 
+fun OkHttpClient.Builder.trustAllCertificates(trustAll: Boolean) {
+    val trustManagers = getTrustManagers(trustAll)
+
+    val sslSocketFactory = try {
+        javax.net.ssl.SSLContext.getInstance("TLS")
+            .apply { init(null, trustManagers, null) }
+            .socketFactory
+    } catch (exception: GeneralSecurityException) {
+//        robologs.Robolog.e(
+//            "no tls ssl socket factory available",
+//            robologs.Meta<Throwable>(exception)
+//        )
+        null
+    }
+}
+
+fun getTrustManagers(trustAll: Boolean): Array<X509TrustManager>? =
+    if (trustAll) {
+        arrayOf(object : X509TrustManager {
+            override fun checkClientTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun checkServerTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun getAcceptedIssuers() = arrayOf<X509Certificate>()
+        })
+    } else {
+        val x509TrustManager = try {
+            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+                .apply { init(null as KeyStore?) }
+                .trustManagers[0] as X509TrustManager
+        } catch (exception: GeneralSecurityException) {
+//            Robolog.e(
+//                "no trust manager available",
+//                Meta<Throwable>(exception)
+//            )
+            null
+        }
+        x509TrustManager?.let { arrayOf(it) }
+    }
+
+fun getSSLSocketFactory(trustManagers: Array<X509TrustManager>?): SSLSocketFactory? =
+    try {
+        SSLContext.getInstance("TLS")
+            .apply { init(null, trustManagers, null) }
+            .socketFactory
+    } catch (exception: GeneralSecurityException) {
+//        Robolog.e(
+//            "no tls ssl socket factory available",
+//            Meta<Throwable>(exception)
+//        )
+        null
+    }
+
+fun getTatarAffixNumber(number: Int): String =
+    number.toString() +
+            when (number % 10) {
+                1, 2, 7, 8 -> {
+                    "дән"
+                }
+                3, 4, 5 -> {
+                    "тән"
+                }
+                6, 9 -> {
+                    "дан"
+                }
+                0 -> {
+                    when (number % 100) {
+                        0, 20, 50 -> {
+                            "дән"
+                        }
+                        10, 90 -> {
+                            "нан"
+                        }
+                        30 -> {
+                            "дан"
+                        }
+                        40, 60 -> {
+                            "тан"
+                        }
+                        70 -> {
+                            "тән"
+                        }
+                        80 -> {
+                            "нән"
+                        }
+                        else -> ""
+                    }
+                }
+                else -> ""
+            }
+
 
 fun versionAllowsToFullyColorizeNavBar(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
@@ -89,5 +192,14 @@ fun <T> MutableList<T>.replaceWith(newElement: T, predicate: (T) -> Boolean) {
     if (index != -1) {
         removeAt(index)
         add(index, newElement)
+    }
+}
+
+fun getMinWidgetWidth(options: Bundle?): Int {
+    return if (options == null || !options.containsKey(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH )
+    ) {
+        0
+    } else {
+        options.get(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) as Int
     }
 }

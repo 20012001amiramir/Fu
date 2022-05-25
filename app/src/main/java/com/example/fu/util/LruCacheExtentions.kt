@@ -1,4 +1,4 @@
-package ru.tstst.schoolboy.util
+package com.example.fu.util
 
 import android.util.LruCache
 
