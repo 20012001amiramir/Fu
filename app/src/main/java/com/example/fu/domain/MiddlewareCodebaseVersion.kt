@@ -1,4 +1,4 @@
-package ru.tstst.schoolboy.domain
+package com.example.fu.domain
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ShapeAppearanceOverlay.BottomSheetDialog" parent="">
+        <item name="cornerSizeTopLeft">@dimen/corner_radius_bottom_sheet</item>
+        <item name="cornerSizeTopRight">@dimen/corner_radius_bottom_sheet</item>
+        <item name="cornerFamily">rounded</item>
+
+        <dimen name="corner_radius_default">20dp</dimen>
+        <dimen name="corner_radius_small">8dp</dimen>
+        <dimen name="corner_radius_bottom_sheet">18dp</dimen>
+    </style></resources>

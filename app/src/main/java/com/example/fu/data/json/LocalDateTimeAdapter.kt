@@ -1,4 +1,4 @@
-package ru.tstst.schoolboy.data.json
+package com.example.fu.data.json
 
 import android.os.Build
 import androidx.annotation.RequiresApi

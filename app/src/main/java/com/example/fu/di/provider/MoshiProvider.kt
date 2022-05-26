@@ -2,7 +2,7 @@ package com.example.fu.di.provider
 
 import com.example.fu.data.json.LocalDateAdapter
 import com.squareup.moshi.Moshi
-import ru.tstst.schoolboy.data.json.LocalDateTimeAdapter
+import com.example.fu.data.json.LocalDateTimeAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject

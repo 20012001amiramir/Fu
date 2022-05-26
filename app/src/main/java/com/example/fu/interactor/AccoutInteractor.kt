@@ -1,4 +1,4 @@
-package ru.tstst.schoolboy.interactor
+package com.example.fu.interactor
 
 import android.os.Build
 import androidx.annotation.RequiresApi

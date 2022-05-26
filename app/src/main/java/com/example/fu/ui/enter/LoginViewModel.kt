@@ -12,7 +12,7 @@ import com.example.fu.interactor.SessionInteractors
 import com.example.fu.util.ErrorHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ru.tstst.schoolboy.interactor.AccountInteractor
+import com.example.fu.interactor.AccountInteractor
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.N)
