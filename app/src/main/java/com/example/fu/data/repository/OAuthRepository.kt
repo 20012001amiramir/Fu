@@ -54,8 +54,8 @@ class OAuthRepository @Inject constructor(
             val tokenResponse = authApi.refreshToken(
                 "Bearer $refreshToken"
             )
-            localStorage.refreshToken = tokenResponse.data.refreshToken
-            accessToken = tokenResponse.data.accessToken
+            localStorage.refreshToken = tokenResponse.data?.refreshToken
+            accessToken = tokenResponse.data?.accessToken
             localStorage.possibleRefreshToken = null
         } ?: run {
             throw TechnicalError(401, "Unauthorized")

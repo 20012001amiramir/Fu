@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class RegisterResponse(
+data class AddGarbageResponse(
     @Json(name = "data")
     val data: DataToken?,
     @Json(name = "messages")

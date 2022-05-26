@@ -18,14 +18,9 @@ class AccountRepository @Inject constructor(
     private val localStorage: LocalStorage
 ) {
 
-    fun changeToken(accessToken: String?, refreshToken: String?) : Boolean {
-        return if (localStorage.accountActiveCount ?: -1 > 0) {
+    fun changeToken(accessToken: String?, refreshToken: String?) {
             localStorage.possibleRefreshToken = refreshToken
             oAuthRepository.changeToken(accessToken, refreshToken)
-            true
-        } else {
-            false
-        }
     }
 
 

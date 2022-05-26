@@ -51,9 +51,9 @@ android {
 
             ext {
                 trustAllCertificates = true
-                hostName = "schoolboy.tatar.ru"
-                serverApiUrl = "https://dev-schoolboy.platform.tatar.ru/api"
-                authApiUrl = "https://edu.tatar.ru"
+                hostName = "fu"
+                serverApiUrl = "https://fu-arch.herokuapp.com/"
+                authApiUrl = "https://fu-arch.herokuapp.com/"
                 useMockApi = false
                 supportEmail = "schoolboy@tatar.ru"
                 privacyPolicyLink = "https://schoolboy.tilda.ws/privacy-policy"

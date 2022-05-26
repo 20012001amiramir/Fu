@@ -10,7 +10,7 @@ class AccountInteractor @Inject constructor(
     private val repository: AccountRepository
 ){
 
-    fun changeAccount(access: String?, refreshToken: String?) : Boolean {
+    fun changeAccount(access: String?, refreshToken: String?) {
         return repository.changeToken(access, refreshToken)
     }
 
