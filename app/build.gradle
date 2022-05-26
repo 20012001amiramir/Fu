@@ -9,12 +9,6 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
-    bundle {
-        language {
-            // We need to disable strings split for strings or we lose tatar language for bundled release
-            enableSplit = false
-        }
-    }
     lint {
         baseline = file("lint-baseline.xml")
     }
@@ -52,16 +46,12 @@ android {
             ext {
                 trustAllCertificates = true
                 hostName = "fu"
-                serverApiUrl = "https://fu-arch.herokuapp.com/"
-                authApiUrl = "https://fu-arch.herokuapp.com/"
+                serverApiUrl = "https://fu-arch.herokuapp.com"
+                authApiUrl = "https://fu-arch.herokuapp.com"
                 useMockApi = false
-                supportEmail = "schoolboy@tatar.ru"
-                privacyPolicyLink = "https://schoolboy.tilda.ws/privacy-policy"
-                psychologyLink = "https://ya-shkolnik.tatar.ru/help-for-you"
-                backLogLink = "https://backlog.schoolboy.tatar.ru"
             }
 
-            manifestPlaceholders.activityOrientation = "unspecified"
+            manifestPlaceholders.activityOrientation = "portrait"
         }
 
         forTestingMock {
@@ -200,24 +190,16 @@ android {
     applicationVariants.all { variant ->
         def serverApiUrl = variant.buildType.ext.serverApiUrl
         def authApiUrl = variant.buildType.ext.authApiUrl
-        def serverApiVersion = "v0"
         def useMockApi = variant.buildType.ext.useMockApi
         def trustAllCertificates = variant.buildType.ext.trustAllCertificates
         def hostName = variant.buildType.ext.hostName
-        def supportEmail = variant.buildType.ext.supportEmail
-        def privacyPolicyLink = variant.buildType.ext.privacyPolicyLink
-        def psychologyLink = variant.buildType.ext.psychologyLink
-        def backlogyLink = variant.buildType.ext.backLogLink
 
-        buildConfigField "String", "SERVER_API_URL", "\"$serverApiUrl/$serverApiVersion/\""
+
+        buildConfigField "String", "SERVER_API_URL", "\"$serverApiUrl/\""
         buildConfigField "String", "HOSTNAME", "\"$hostName\""
         buildConfigField "String", "AUTH_API_URL", "\"$authApiUrl\""
         buildConfigField "Boolean", "USE_MOCK_API", "$useMockApi"
-        buildConfigField "String", "SUPPORT_EMAIL", "\"$supportEmail\""
         buildConfigField "Boolean", "TRUST_ALL_CERTIFICATES", trustAllCertificates.toString()
-        buildConfigField "String", "PRIVACY_POLICY_LINK", "\"$privacyPolicyLink\""
-        buildConfigField "String", "PSYCHOLOGY_LINK", "\"$psychologyLink\""
-        buildConfigField "String", "BACKLOG_LINK", "\"$backlogyLink\""
 
     }
 }

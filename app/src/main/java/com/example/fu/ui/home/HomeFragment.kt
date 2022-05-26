@@ -5,13 +5,17 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
@@ -24,7 +28,10 @@ import com.example.fu.di.Scopes
 import com.example.fu.di.factory.viewModels
 import com.example.fu.di.hasPermissions
 import com.example.fu.ui.dashboard.DashboardViewModel
+import com.example.fu.ui.enter.LoginViewModel
+import com.example.fu.util.navigateSafe
 
+@RequiresApi(Build.VERSION_CODES.N)
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
@@ -68,7 +75,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val activity = requireActivity()
         codeScanner.decodeCallback = DecodeCallback {
             activity.runOnUiThread {
-                Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
+                homeViewModel.loadGarbageInfo(it.text)
             }
         }
         binding.scannerView.setOnClickListener {
@@ -88,6 +95,27 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     .show()
             }
         }
+
+        homeViewModel.subjectGarbageState.observe(viewLifecycleOwner){
+            when(it){
+                is HomeViewModel.SubjectGarbageGetState.Blank -> {
+                    binding.ProgressBar.isVisible = false
+                }
+                is HomeViewModel.SubjectGarbageGetState.LoadingProgress -> {
+                    binding.ProgressBar.isVisible = true
+                }
+                is HomeViewModel.SubjectGarbageGetState.Data -> {
+                    binding.ProgressBar.isVisible = false
+                    if(it.info.success){
+                        Toast.makeText(context, it.info.messages?.get(0) ?: "", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        Toast.makeText(context, it.info.messages?.get(0) ?: "", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
     }
 
     override fun onResume() {
