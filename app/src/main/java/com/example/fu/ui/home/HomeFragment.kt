@@ -8,11 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -22,13 +20,10 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.example.fu.R
-import com.example.fu.databinding.FragmentDashboardBinding
 import com.example.fu.databinding.FragmentHomeBinding
 import com.example.fu.di.Scopes
 import com.example.fu.di.factory.viewModels
 import com.example.fu.di.hasPermissions
-import com.example.fu.ui.dashboard.DashboardViewModel
-import com.example.fu.ui.enter.LoginViewModel
 import com.example.fu.util.navigateSafe
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -71,11 +66,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
 
         initQrReader()
-
+        var barcode: String? = null
         val activity = requireActivity()
         codeScanner.decodeCallback = DecodeCallback {
             activity.runOnUiThread {
                 homeViewModel.loadGarbageInfo(it.text)
+                barcode = it.text
             }
         }
         binding.scannerView.setOnClickListener {
@@ -110,13 +106,27 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         Toast.makeText(context, it.info.messages?.get(0) ?: "", Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        Toast.makeText(context, it.info.messages?.get(0) ?: "", Toast.LENGTH_SHORT).show()
+                        AlertDialog
+                            .Builder(context, R.style.MyDialogStyle)
+                            .setTitle("К сожалению, данной упаковки в списке нету, желаете добавить?")
+                            .setPositiveButton("Да") { dialog, _ ->
+                                val bundle = Bundle()
+                                bundle.putString("barcode", barcode)
+                                findNavController().navigateSafe(R.id.navigation_home, R.id.action_navigation_home_to_addGarbageDialogFragment,bundle)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Нет") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+
                     }
                 }
             }
         }
 
     }
+
 
     override fun onResume() {
         super.onResume()

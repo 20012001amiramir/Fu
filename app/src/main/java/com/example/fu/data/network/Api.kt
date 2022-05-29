@@ -3,13 +3,14 @@ package com.example.fu.data.network
 import com.example.fu.data.network.request.AddGarbageRequest
 import com.example.fu.data.network.request.GetGarbageRequest
 import com.example.fu.data.network.response.AddGarbageResponse
+import com.example.fu.data.network.response.GarbagesResponse
 import retrofit2.http.*
 
 interface Api {
 
 
     @POST("Garbage/AddGarbageInfo")
-    suspend fun AddGarbagInfo(@Body request: AddGarbageRequest): AddGarbageResponse
+    suspend fun AddGarbageInfo(@Body request: AddGarbageRequest): AddGarbageResponse
 
     @GET("Garbage")
     suspend fun GetGarbageInfo(@Query("barcode") barcode: String?): AddGarbageResponse
@@ -21,7 +22,7 @@ interface Api {
     suspend fun GetGarbageInfoByAuthorizedUser( @Query("barcode") barcode: String?): AddGarbageResponse
 
     @GET("Garbage/GetGarbagesScanedByAuthorizedUser")
-    suspend fun GetGarbagesScanedByAuthorizedUser(): AddGarbageResponse
+    suspend fun GetGarbagesScanedByAuthorizedUser(): GarbagesResponse
 
     @POST("Garbage/AddGarbageFromApiToUserHistory")
     suspend fun AddGarbageFromApiToUserHistory(@Body request: GetGarbageRequest): AddGarbageResponse

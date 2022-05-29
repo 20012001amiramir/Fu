@@ -8,11 +8,15 @@
         android:id="@+id/navigation_home"
         android:name="com.example.fu.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_addGarbageDialogFragment"
+            app:destination="@id/addGarbageDialogFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.fu.ui.dashboard.DashboardFragment"
+        android:name="com.example.fu.ui.dashboard.ScanedGarbagesFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
@@ -48,4 +52,13 @@
             android:id="@+id/action_mainEnterFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/addGarbageDialogFragment"
+        android:name="com.example.fu.ui.home.AddGarbageDialogFragment"
+        android:label="AddGarbageDialogFragment" >
+        <argument
+            android:name="barcode"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
 </navigation>

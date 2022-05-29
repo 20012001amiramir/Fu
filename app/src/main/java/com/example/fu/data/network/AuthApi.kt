@@ -25,7 +25,6 @@ interface AuthApi {
         @Field("Password") Password: String,
     ): LoginResponse
 
-    @FormUrlEncoded
     @POST("/Account/RefreshToken")
     suspend fun refreshToken(
         @Header("Authorization") token: String

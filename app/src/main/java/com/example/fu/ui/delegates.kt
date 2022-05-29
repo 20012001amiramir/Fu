@@ -1,5 +1,10 @@
 package com.example.fu.ui
 
+import com.example.fu.data.network.response.AddGarbageResponse
+import com.example.fu.data.network.response.DataTokenForGarbage
+import com.example.fu.data.network.response.GarbageType
+import com.example.fu.databinding.ItemGarbageBinding
+import com.example.fu.databinding.ItemGarbageTypeBinding
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 sealed class RecyclerItem {
@@ -15,54 +20,28 @@ sealed class RecyclerItem {
 }
 
 
-fun notificationListDelegate(
+fun typeGarbageListDelegate(
 ) =
-    adapterDelegateViewBinding<String, Any, ItemNotificationsListBinding>(
+    adapterDelegateViewBinding<DataTokenForGarbage, Any, ItemGarbageBinding>(
         viewBinding = { layoutInflater, parent ->
-            ItemNotificationsListBinding.inflate(
+            ItemGarbageBinding.inflate(
                 layoutInflater,
                 parent,
                 false
             )
         },
         block = {
-            fun bindItem(notification: NotificationEntity) {
-                if (notification.viewed)
-                    binding.notification.setBackgroundResource(R.color.white)
-                else
-                    binding.notification.setBackgroundResource(R.color.notification_not_viewed)
-                binding.notification.setNotificationMarkInfo(
-                    notification.info.value ?: 0,
-                    notification.info.subject ?: "",
-                    getString(R.string.rated),
-                    notification.info.type ?: "",
-                    notification.info.setMarkDate
-                )
-            }
+            bind {
+                with(binding){
+                    name.text = item.name
+                    barcode.text = item.barcode
+                    typeOfGarbage.text = item.garbageTypes?.joinToString(", ") { it.name } ?: " no type "
+                    description.text = item.description
+                }
 
-            bind { bindItem(item) }
+            }
 
         }
     )
 
-fun loadingDelegate() =
-    adapterDelegateViewBinding<LoadingVO, Any, ItemLoadingBinding>(
-        viewBinding = { layoutInflater, parent ->
-            ItemLoadingBinding.inflate(layoutInflater, parent, false)
-        }, block = { }
-    )
-
-fun pushDisabled(
-    clickListener: () -> Unit
-) = adapterDelegateViewBinding<PushDisabled, Any, ItemPushDisabledBinding>(
-    viewBinding = { layoutInflater, parent ->
-        ItemPushDisabledBinding.inflate(layoutInflater, parent, false)
-    }, block = {
-        bind {
-            itemView.setOnClickListener {
-                clickListener()
-            }
-        }
-    }
-)
 

@@ -6,7 +6,13 @@
         <item name="cornerSizeTopRight">@dimen/corner_radius_bottom_sheet</item>
         <item name="cornerFamily">rounded</item>
 
-        <dimen name="corner_radius_default">20dp</dimen>
-        <dimen name="corner_radius_small">8dp</dimen>
-        <dimen name="corner_radius_bottom_sheet">18dp</dimen>
-    </style></resources>
+    </style>
+
+    <style name="MyDialogStyle" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/green</item>
+    </style>
+
+
+
+</resources>

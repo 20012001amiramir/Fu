@@ -1,8 +1,12 @@
 package com.example.fu.ui.notifications
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -20,13 +24,20 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
 
     val viewModel: NotificationsViewModel by viewModels(Scopes.APP_SCOPE , Scopes.APP_ACTIVITY_SCOPE)
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        val textView: TextView = binding.textNotifications
-        viewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return false
+            }
         }
+
+        binding.webView.settings.javaScriptEnabled = true;
+        binding.webView.loadUrl("http://www.google.com");
     }
 }

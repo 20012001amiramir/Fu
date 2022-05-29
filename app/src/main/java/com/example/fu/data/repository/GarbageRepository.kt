@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import com.example.fu.data.network.Api
 import com.example.fu.data.network.request.AddGarbageRequest
 import com.example.fu.data.network.response.AddGarbageResponse
+import com.example.fu.data.network.response.GarbagesResponse
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
@@ -30,6 +31,21 @@ class GarbageRepository @Inject constructor(
         garbageFlow.valueAsUnique = api.GetGarbageInfo(barcode)
     }
 
+    private val garbagesScanedFlow = MutableStateFlow<GarbagesResponse?>(null)
+
+    fun getGarbagesScanedByAuthorizedUserFlow(): Flow<GarbagesResponse> = garbagesScanedFlow.filterNotNull()
+
+    suspend fun loadGarbagesScanedInfo() {
+        garbagesScanedFlow.valueAsUnique = api.GetGarbagesScanedByAuthorizedUser()
+    }
+
+    private val addGarbageFlow = MutableStateFlow<AddGarbageResponse?>(null)
+
+    fun getAddGarbageFlow(): Flow<AddGarbageResponse> = addGarbageFlow.filterNotNull()
+
+    suspend fun addGarbage(garbage: AddGarbageRequest) {
+        addGarbageFlow.valueAsUnique = api.AddGarbageInfo(garbage)
+    }
 
 
 }

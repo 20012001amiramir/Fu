@@ -9,7 +9,7 @@ data class AddGarbageRequest(
     @Json(name = "name")
     val name: String?,
     @Json(name = "garbageTypes")
-    val garbageTypes: List<String>?,
+    val garbageTypes: Int?,
     @Json(name = "barcode")
     val barcode: String?,
     @Json(name = "image")

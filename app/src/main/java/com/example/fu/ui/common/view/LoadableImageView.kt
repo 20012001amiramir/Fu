@@ -57,11 +57,11 @@ class LoadableImageView(
     }
 
     init {
-        context.withStyledAttributes(attrs, R.styleable.LoadableImageView) {
-            placeholder = getDrawable(R.styleable.LoadableImageView_placeholder)
-            error = getDrawable(R.styleable.LoadableImageView_error)
-            loadScaling = getEnum(R.styleable.LoadableImageView_loadScaling, loadScaling)
-        }
+//        context.withStyledAttributes(attrs, R.styleable.LoadableImageView) {
+//            placeholder = getDrawable(R.styleable.LoadableImageView_placeholder)
+//            error = getDrawable(R.styleable.LoadableImageView_error)
+//            loadScaling = getEnum(R.styleable.LoadableImageView_loadScaling, loadScaling)
+//        }
     }
 
 

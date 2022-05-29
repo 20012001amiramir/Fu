@@ -31,7 +31,7 @@ fun BottomSheetDialog.forceBackgroundRoundCorners(
                 .builder(
                     context,
                     0,
-                    com.example.fu.R.style.ShapeAppearanceOverlay_SchoolBoy_BottomSheetDialog
+                    com.example.fu.R.style.ShapeAppearanceOverlay_BottomSheetDialog
                 )
                 .build()
         return MaterialShapeDrawable(shapeAppearanceModel).apply {
