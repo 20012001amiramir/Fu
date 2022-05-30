@@ -18,7 +18,11 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.fu.ui.dashboard.ScanedGarbagesFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_addGarbageDialogFragment"
+            app:destination="@id/addGarbageDialogFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -59,6 +63,7 @@
         <argument
             android:name="barcode"
             app:argType="string"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="77777" />
     </dialog>
 </navigation>

@@ -8,9 +8,10 @@ import retrofit2.http.*
 
 interface Api {
 
+    @FormUrlEncoded
+    @POST("Garbage/AddGarbageFromApiToUserHistory")
+    suspend fun AddGarbageInfo(@Field("name") name: String?, @Field("garbageTypes") garbageTypes: List<Int>?,@Field("barcode") barcode: String?,@Field("image") image: String?,): AddGarbageResponse
 
-    @POST("Garbage/AddGarbageInfo")
-    suspend fun AddGarbageInfo(@Body request: AddGarbageRequest): AddGarbageResponse
 
     @GET("Garbage")
     suspend fun GetGarbageInfo(@Query("barcode") barcode: String?): AddGarbageResponse

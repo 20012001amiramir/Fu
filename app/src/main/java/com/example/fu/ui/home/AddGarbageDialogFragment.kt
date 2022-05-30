@@ -37,7 +37,7 @@ class AddGarbageDialogFragment : BottomSheetDialogFragment() {
 
 //  private val tagList: List<>
 
-    private val viewModel: AddGarbageDialogViewModel by viewModels(Scopes.APP_ACTIVITY_SCOPE, Scopes.objectScopeName )
+    private val viewModel: AddGarbageDialogViewModel by viewModels(Scopes.APP_SCOPE, Scopes.APP_ACTIVITY_SCOPE )
     
 //    private val delegates = ListDelegationAdapter(
 //
@@ -79,9 +79,9 @@ class AddGarbageDialogFragment : BottomSheetDialogFragment() {
                 viewModel.addGarbage(
                     AddGarbageRequest(
                         binding.name.text.toString(),
-                        2,
+                        listOf(2),
                         binding.barcode.text.toString(),
-                        null
+                        "https://picsum.photos/200"
                     )
                 )
             }
@@ -103,9 +103,10 @@ class AddGarbageDialogFragment : BottomSheetDialogFragment() {
                     is AddGarbageViewState.Data -> {
                         if(it.data.success){
                             activity?.onBackPressed()
+                            Toast.makeText(context, it.data.messages?.joinToString(",") ?: "Все получилось!", Toast.LENGTH_SHORT).show()
                         }
-                        else{
-                            Toast.makeText(context, "Чето не так(", Toast.LENGTH_SHORT).show()
+                        else if(!it.data.success){
+                            Toast.makeText(context, it.data.messages?.joinToString(",") ?: "", Toast.LENGTH_SHORT).show()
                         }
                         okey.isVisible = true
                         binding.proggressBar.isVisible = false

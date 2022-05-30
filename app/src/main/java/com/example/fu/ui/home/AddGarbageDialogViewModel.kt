@@ -41,7 +41,14 @@ class AddGarbageDialogViewModel @Inject constructor(
         _addGarbageState.value = AddGarbageViewState.LoadingViewState
         viewModelScope.launch {
             try {
-                garbageRepository.addGarbage(garbage)
+                garbageRepository.addGarbage(garbage.let {
+                    AddGarbageRequest(
+                        it.name,
+                        it.garbageTypes,
+                        it.barcode,
+                        "https://picsum.photos/200"
+                    )
+                })
             } catch (error: Throwable) {
                 _addGarbageState.value = AddGarbageViewState.LoadingError(error)
                 errorHandler.proceed(error)

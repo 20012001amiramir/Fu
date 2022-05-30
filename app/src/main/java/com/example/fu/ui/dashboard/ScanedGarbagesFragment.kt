@@ -33,7 +33,7 @@ class ScanedGarbagesFragment : Fragment(R.layout.fragment_dashboard){
         typeGarbageListDelegate()
     )
 
-    private val scanedGarbagesViewModel: ScanedGarbagesViewModel by viewModels(Scopes.APP_SCOPE , Scopes.objectScopeName)
+    private val scanedGarbagesViewModel: ScanedGarbagesViewModel by viewModels(Scopes.APP_SCOPE , Scopes.APP_ACTIVITY_SCOPE)
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,6 +49,10 @@ class ScanedGarbagesFragment : Fragment(R.layout.fragment_dashboard){
             adapter = delegates
         }
         scanedGarbagesViewModel.loadGarbagesInfo()
+
+        binding.floatButton.setOnClickListener {
+            findNavController().navigateSafe(R.id.navigation_dashboard, R.id.action_navigation_dashboard_to_addGarbageDialogFragment)
+        }
 
         scanedGarbagesViewModel.garbageScannedGarbagesState.observe(viewLifecycleOwner){
             when(it){

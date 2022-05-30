@@ -38,6 +38,6 @@ class NotificationsFragment : Fragment(R.layout.fragment_notifications) {
         }
 
         binding.webView.settings.javaScriptEnabled = true;
-        binding.webView.loadUrl("http://www.google.com");
+        binding.webView.loadUrl("https://recyclemap.ru/");
     }
 }

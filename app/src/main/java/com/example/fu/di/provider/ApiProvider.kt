@@ -8,6 +8,7 @@ import com.example.fu.di.qualifier.UseMockApi
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 import javax.inject.Provider
@@ -23,7 +24,7 @@ class ApiProvider @Inject constructor(
             .Builder()
             .client(okHttpClient)
             .baseUrl(baseUrl)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(Api::class.java)
 

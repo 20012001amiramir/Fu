@@ -105,7 +105,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     if(it.info.success){
                         Toast.makeText(context, it.info.messages?.get(0) ?: "", Toast.LENGTH_SHORT).show()
                     }
-                    else{
+                    else if(!it.info.success){
                         AlertDialog
                             .Builder(context, R.style.MyDialogStyle)
                             .setTitle("К сожалению, данной упаковки в списке нету, желаете добавить?")

@@ -44,7 +44,7 @@ class GarbageRepository @Inject constructor(
     fun getAddGarbageFlow(): Flow<AddGarbageResponse> = addGarbageFlow.filterNotNull()
 
     suspend fun addGarbage(garbage: AddGarbageRequest) {
-        addGarbageFlow.valueAsUnique = api.AddGarbageInfo(garbage)
+        addGarbageFlow.valueAsUnique = api.AddGarbageInfo(garbage.name, garbage.garbageTypes, garbage.barcode,garbage.image)
     }
 
 
