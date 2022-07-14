@@ -35,13 +35,9 @@ class AddGarbageDialogFragment : BottomSheetDialogFragment() {
 
     private val args: AddGarbageDialogFragmentArgs by navArgs()
 
-//  private val tagList: List<>
 
     private val viewModel: AddGarbageDialogViewModel by viewModels(Scopes.APP_SCOPE, Scopes.APP_ACTIVITY_SCOPE )
-    
-//    private val delegates = ListDelegationAdapter(
-//
-//    )
+
     
     override fun onCreateView(
         inflater: LayoutInflater,

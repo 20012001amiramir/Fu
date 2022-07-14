@@ -36,10 +36,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var codeScanner: CodeScanner
 
-    private val PERMISSIONS = arrayOf(
-        Manifest.permission.CAMERA
-    )
-
     private val MY_PERMISSIONS_REQUEST = 777
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
